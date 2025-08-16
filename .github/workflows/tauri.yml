@@ -1,4 +1,4 @@
-name: Build Tauri Apps (Windows, Linux, macOS)
+name: Build Tauri App (Ubuntu x86_64)
 
 on:
   push:
@@ -17,12 +17,6 @@ jobs:
         include:
           - platform: ubuntu-latest
             target: x86_64-unknown-linux-gnu
-          - platform: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-          - platform: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-          - platform: macos-latest
-          - platform: windows-latest
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout repository
@@ -31,7 +25,7 @@ jobs:
       - name: Setup PNPM
         uses: pnpm/action-setup@v4
         with:
-          version: 9
+          version: 10
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -73,19 +67,20 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUST_BACKTRACE: 1
         with:
           tagName: ${{ github.ref_name }}
           releaseId: ${{ steps.create-release.outputs.id }}
           projectPath: '.'
           tauriScript: 'pnpm tauri'
-          args: ${{ matrix.platform == 'ubuntu-latest' && matrix.target != '' && format('--bundles deb,appimage,app --target {0}', matrix.target) || '' }}
-          useCross: ${{ matrix.platform == 'ubuntu-latest' && matrix.target != '' }}
+          args: '--bundles deb --target x86_64-unknown-linux-gnu --verbose'
+          useCross: false
 
-      - name: Upload Linux tar.gz artifact to Release
+      - name: Upload Linux .deb to Release
         if: matrix.platform == 'ubuntu-latest' && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            src-tauri/target/${{ matrix.target }}/release/bundle/app/*.tar.gz
+            src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
