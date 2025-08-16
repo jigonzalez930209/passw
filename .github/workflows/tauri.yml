@@ -17,6 +17,8 @@ jobs:
         include:
           - platform: ubuntu-latest
             target: x86_64-unknown-linux-gnu
+          - platform: macos-latest
+          - platform: windows-latest
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout repository
@@ -73,7 +75,7 @@ jobs:
           releaseId: ${{ steps.create-release.outputs.id }}
           projectPath: '.'
           tauriScript: 'pnpm tauri'
-          args: '--bundles deb --target x86_64-unknown-linux-gnu --verbose'
+          args: ${{ matrix.platform == 'ubuntu-latest' && '--bundles deb --target x86_64-unknown-linux-gnu --verbose' || '--verbose' }}
           useCross: false
 
       - name: Upload Linux .deb to Release
