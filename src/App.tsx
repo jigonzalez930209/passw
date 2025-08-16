@@ -26,14 +26,14 @@ function App() {
           <Logo className="w-40 h-40" />
         </div>
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold">Pass generator</h1>
+          <h1 className="text-2xl font-semibold">Password generator</h1>
           <ThemeToggle />
         </div>
 
         <div className="rounded-xl border backdrop-blur p-5 shadow-sm">
           <div className="mb-3 flex items-center justify-between">
             <label htmlFor="main-input" className="text-sm opacity-80">
-              Frase maestra
+              Master passphrase
             </label>
             <Button
               onClick={async () => {
@@ -57,7 +57,7 @@ function App() {
               variant="default"
               size="sm"
             >
-              {busy ? "Generando..." : "Generar"}
+              {busy ? "Generating..." : "Generate"}
             </Button>
           </div>
           <div className="relative">
@@ -66,14 +66,14 @@ function App() {
               type={showMaster ? "text" : "password"}
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="Tu frase maestra..."
+              placeholder="Your master passphrase..."
               className="pr-10"
             />
             <Button
               variant="ghost"
               size="icon"
               type="button"
-              aria-label={showMaster ? "Ocultar" : "Mostrar"}
+              aria-label={showMaster ? "Hide" : "Show"}
               onClick={() => setShowMaster((v) => !v)}
               className="absolute inset-y-0 right-0 flex items-center pr-2 text-secondary-foreground"
             >
@@ -87,7 +87,7 @@ function App() {
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <label htmlFor="len" className="text-sm opacity-80">
-                Largo: <span className="font-medium">{length}</span>
+                Length: <span className="font-medium">{length}</span>
               </label>
               <span className="text-xs opacity-60">8–120</span>
             </div>
@@ -112,14 +112,14 @@ function App() {
                     setCopied(true);
                     setTimeout(() => {
                       setCopied(false);
-                      toast.success("Contraseña copiada al portapapeles");
+                      toast.success("Password copied to clipboard");
                     }, 200);
                   } catch (e) {}
                 }}
                 variant="ghost"
                 size="icon"
-                aria-label="Copiar contraseña"
-                title={copied ? "¡Copiado!" : "Copiar"}
+                aria-label="Copy password"
+                title={copied ? "Copied!" : "Copy"}
                 className="absolute top-1.5 right-1.5 inline-flex items-center justify-center rounded-md p-1.5"
               >
                 {copied ? (
